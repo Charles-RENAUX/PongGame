@@ -671,7 +671,7 @@ def creatMenu():
     
    
     
-    image = Image.open("images.png")
+    image = Image.open("Images/images.png")
     image = image.resize((100, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     
