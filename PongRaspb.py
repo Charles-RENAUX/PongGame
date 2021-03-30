@@ -2,10 +2,8 @@
 """
 Created on Tue Mar 23 11:40:15 2021
 
-@author: Lenovo
+@author: Charles RENAUX
 """
-
-
 import tkinter as tk
 from PIL import ImageTk,Image
 import pygame as py 
@@ -44,6 +42,7 @@ MusicWall=py.mixer.Sound('SoundPackage/Music/VsWall.mp3')
     #fenetre
 haut_fenetre=480;
 larg_fenetre=800;
+Y=500
 
 #ZoneDetection et  parametres IA
 ZoneDetection = 0.9
@@ -70,11 +69,11 @@ PosYj4= haut_fenetre-20
 dx=8
 dy=10
 
-dxMenu= 10
-dyMenu= 14
+dxMenu= 3
+dyMenu= 5
      #position initiale de la balle
-PosXballmenu=haut_fenetre/4
-PosYballmenu=larg_fenetre/2
+PosXballmenu=200
+PosYballmenu=200
     #init des scores
 scorej1=0
 scorej2=0
@@ -89,7 +88,13 @@ tabColor=np.array(['blue','red','green','yellow','pink','purple','orange','grey'
 introduction=True
 apparition=True
 vR,vG,vB = 0,0,0
-
+    #Variables pseudo joueurs
+pseudo1="Joueur1"
+pseudo2="Joueur2"
+pseudo3="Joueur3"
+pseudo4="Joueur4"
+    #Variable IA
+IA = False
 
 # ---------------------------------------------------------------------------------------------------------
 def game_2players():
@@ -522,7 +527,7 @@ def game_2playersPODER():
                     soundAttack.play()
                     soundAttack.set_volume(1.0)
                     dy=0
-                    dx=50
+                    dx=dx+50
                     espJ1=0
                     x0,y0,x1,y1 = canvas.coords(barreEspJ1Int)
                     x1=larg_fenetre/2-60+(25*espJ1)
@@ -538,7 +543,7 @@ def game_2playersPODER():
                     soundAttack2.play()
                     soundAttack2.set_volume(1.0)
                     dy=0
-                    dx=-50
+                    dx=-abs(dx+50)
                     espJ2=0
                     x0,y0,x1,y1 = canvas.coords(barreEspJ2Int)
                     x1=larg_fenetre/2+10+(25*espJ2)
@@ -657,7 +662,7 @@ def game_2playersPODER():
             
                 
         if not py.mixer.get_busy():
-            Music2J.play()
+            MusicPODER.play()
     
         canvas.after(50,mouvball)
     
@@ -675,7 +680,7 @@ def game_2playersPODER():
         canvas.delete(barreEspJ1Int)
         canvas.delete(barreEspJ2)
         canvas.delete(barreEspJ2Int)
-        Music2J.stop()
+        MusicPODER.stop()
         if abs(scorej1-scorej2) < 5:
             winSound.play()
         if abs(scorej1-scorej2) >= 5:
@@ -1246,7 +1251,7 @@ def game_4players():
             
                 
         if not py.mixer.get_busy():
-            Music2J.play()
+            Music4J.play()
     
         canvas.after(50,mouvball)
     
@@ -1264,7 +1269,7 @@ def game_4players():
         canvas.delete(mur2)
         canvas.delete(mur3)
         canvas.delete(mur4)
-        Music2J.stop()
+        Music4J.stop()
         if abs(scorej1-scorej2) < 5:
             winSound.play()
         if abs(scorej1-scorej2) >= 5:
@@ -1453,9 +1458,111 @@ def game_vsWall():
 
 # -------------------------------------------------------------------------------------------------------------
 
+def gameCredits():
+    global larg_fenetre,haut_fenetre,Y
+    MusicMenu.stop()
+    #init variable local
+    
+   
+    #init de la fennetre de jeux.
+    Pong = tk.Tk()
+    Pong.title("Credits")
+    
+    #Création du canvas + ajout a la fen
+    canvas = tk.Canvas(Pong,width = larg_fenetre, height = haut_fenetre , bd=0, bg="black")
+    canvas.pack(padx=10,pady=10)
+    
+    
+    #création des elements du jeux
+    TextCredit=canvas.create_text(larg_fenetre/2,Y,fill="red4",font="Times 15 bold",text="Game made by Prheidator")
+    TextGD=canvas.create_text(larg_fenetre/2,Y+50,fill="white",font="Times 15 bold",text="GameDesign : Charles RENAUX")
+    TextIA=canvas.create_text(larg_fenetre/2,Y+100,fill="white",font="Times 15 bold",text="Bot and IA : Clément Peter LEROY ")
+    TextUI=canvas.create_text(larg_fenetre/2,Y+150,fill="white",font="Times 15 bold",text=" User interface : Charles RENAUX")
+    TextBE=canvas.create_text(larg_fenetre/2,Y+200,fill="white",font="Times 15 bold",text="Sockets : Clément Peter LEROY & Jules WILLARD")
+    TextAPP=canvas.create_text(larg_fenetre/2,Y+250,fill="white",font="Times 15 bold",text="Android Application : Clément Peter Leroy, Noé FAIT & Arthur SEMUR")
+    TextBORNE=canvas.create_text(larg_fenetre/2,Y+300,fill="white",font="Times 15 bold",text="Borne d'arcade design by Arthur SEMUR, Noé FAIT & Maxence LUTTRINGER")
+    TextTxt=canvas.create_text(larg_fenetre/2,Y+400,fill="white",font="Times 15 bold",text="Special thanks : l'Atelihei, Vectors_Market, ultimatearm & sawsquarenoise")
+    
+    
+    #animation du générique:
+    #print(canvas.coords(TextCredit))
+    def generique():
+        MusicMenu.stop()
+        global Y,larg_fenetre
+        
+        Y= Y-1
+        if canvas.coords(TextTxt)[1]>0:
+            canvas.coords(TextCredit,larg_fenetre/2,Y)
+            canvas.coords(TextGD,larg_fenetre/2,Y+50)
+            canvas.coords(TextIA,larg_fenetre/2,Y+100)
+            canvas.coords(TextUI,larg_fenetre/2,Y+150)
+            canvas.coords(TextBE,larg_fenetre/2,Y+200)
+            canvas.coords(TextAPP,larg_fenetre/2,Y+250)
+            canvas.coords(TextBORNE,larg_fenetre/2,Y+300)
+            canvas.coords(TextTxt,larg_fenetre/2,Y+400)
+            canvas.after(20,generique)
+        else:
+            canvas.after(250,Pong.destroy)
+            canvas.after(200,creatMenu)
+        
+    
+    
+   
+        
+    canvas.focus_set()#on met le focus sur le canvas
+    Pong.focus_force()
+    generique()
+    Pong.mainloop()
+
+# -------------------------------------------------------------------------------------------------------------
+def optionMenu():
+    MusicMenu.stop()
+    #init de la fennetre du menu.
+    menuop = tk.Tk()
+    menuop.title("Pong Option Menu by Prheidator")
+    
+    
+    #Création du canvas + ajout a la fen
+    MenuOptionCanvas = tk.Canvas(menuop,width = larg_fenetre, height = haut_fenetre , bd=0, bg="black")
+    MenuOptionCanvas.pack(padx=10,pady=10)
+    
+    
+    entre1=MenuOptionCanvas.create_rectangle(200,haut_fenetre/4,600,haut_fenetre/4+50,outline='white')
+    entre2=MenuOptionCanvas.create_rectangle(200,haut_fenetre/4+70,600,haut_fenetre/4+120,outline='white')
+    
+    entreTitre=MenuOptionCanvas.create_text(400,haut_fenetre/4-25,fill="red",font="Times 15 bold",text="Choix de l'IA")
+    entre1Titre=MenuOptionCanvas.create_text(400,haut_fenetre/4+25,fill="white",font="Times 15 bold",text="Sean Pain")
+    entre2Titre=MenuOptionCanvas.create_text(400,haut_fenetre/4+95,fill="white",font="Times 15 bold",text="Sean DeepPain")
+    
+    
+    def botDEF(event):
+        global IA
+        IA=False
+        MusicMenu.stop()
+        menuop.after(90,MusicMenu.stop)
+        menuop.after(100,creatMenu)
+        menuop.after(110, menuop.destroy)
+    
+    def iaDEF(event):
+        global IA
+        IA=True
+        menuop.after(90,MusicMenu.stop)
+        menuop.after(100,creatMenu)
+        menuop.after(110, menuop.destroy)
+        
+
+    MenuOptionCanvas.tag_bind(entre1, '<Button-1>', botDEF) 
+    MenuOptionCanvas.tag_bind(entre1Titre, '<Button-1>', botDEF)  
+    
+    MenuOptionCanvas.tag_bind(entre2, '<Button-1>', iaDEF) 
+    MenuOptionCanvas.tag_bind(entre2Titre, '<Button-1>', iaDEF)
+    
+    MenuOptionCanvas.mainloop()
+# -------------------------------------------------------------------------------------------------------------
+
 def creatMenu():
     
-    global Startingsound
+    global Startingsound,pseudo1, pseudo2, pseudo3, pseudo4
     
     
     #init de la fennetre du menu.
@@ -1469,7 +1576,7 @@ def creatMenu():
     
    
     
-    image = Image.open("Images/images.png")
+    image = Image.open("Images/logo.png")
     image = image.resize((100, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     
@@ -1508,11 +1615,16 @@ def creatMenu():
     def creatMenuPrincipal():
         global PosXball,PosYball,balleMenu,raquetteMenu
         #création des elements du jeux
-        MenuCanvas.create_image(40,200, anchor = tk.NW, image=photo)
-        balleMenu= MenuCanvas.create_oval(PosXballmenu,PosYballmenu,PosXballmenu+20,PosYballmenu+20,fill='white') #balle de rayon 20
-        MenuCanvas.create_text(larg_fenetre/4,250,fill="white",font="Times 40 bold",text="PONG")
-        MenuCanvas.create_text(larg_fenetre/4+50,275,fill="white",font="Times 8 bold",text="by Prheidator")
-        raquetteMenu=MenuCanvas.create_rectangle(10,haut_fenetre/4,20,haut_fenetre/4+250,fill='white')
+        MenuCanvas.create_image(40,00, anchor = tk.NW, image=photo)
+        balleMenu= MenuCanvas.create_oval(PosXballmenu,PosYballmenu,PosXballmenu+10,PosYballmenu+10,fill='white') #balle de rayon 20
+        MenuCanvas.create_text(larg_fenetre/4,50,fill="white",font="Times 40 bold",text="PONG")
+        MenuCanvas.create_text(larg_fenetre/4+50,75,fill="white",font="Times 8 bold",text="by Pr")
+        MenuCanvas.create_text(larg_fenetre/4+75,75,fill="red",font="Times 8 bold",text="HEI")
+        MenuCanvas.create_text(larg_fenetre/4+100,75,fill="white",font="Times 8 bold",text="dator")
+        EcranMiniPong=MenuCanvas.create_rectangle(50,150,350,350,outline="white")
+        raquetteMenu=MenuCanvas.create_rectangle(55,200,60,250,fill='white')
+        raquetteMenu2=MenuCanvas.create_rectangle(345,200,340,250,fill='white')
+        
         
         
         entre1=MenuCanvas.create_rectangle(larg_fenetre/2+10,haut_fenetre/4,larg_fenetre/2+310,haut_fenetre/4+50,outline='white')
@@ -1522,18 +1634,68 @@ def creatMenu():
         entre5=MenuCanvas.create_rectangle(larg_fenetre/2+10,haut_fenetre/4+210,larg_fenetre/2+310,haut_fenetre/4+260,outline='white')
         entre6=MenuCanvas.create_rectangle(larg_fenetre/2+10,haut_fenetre/4-70,larg_fenetre/2+310,haut_fenetre/4-20,outline='white')
         
-        entre1Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+25,fill="white",font="Times 20 bold",text="2 joueurs")
-        entre2Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+95,fill="white",font="Times 20 bold",text="vs IA")
-        entre3Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+165,fill="white",font="Times 20 bold",text="vs Wall")
-        entre4Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+305,fill="white",font="Times 20 bold",text="Exit")
-        entre5Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+235,fill="white",font="Times 20 bold",text="4 joueurs")
-        entre6Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4-45,fill="white",font="Times 20 bold",text="2J - PODER")
+        entre1Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+25,fill="white",font="Times 15 bold",text="2 joueurs")
+        entre2Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+95,fill="white",font="Times 15 bold",text="vs IA")
+        entre3Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+165,fill="white",font="Times 15 bold",text="vs Wall")
+        entre4Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+305,fill="white",font="Times 15 bold",text="Credits")
+        entre5Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4+235,fill="white",font="Times 15 bold",text="4 joueurs")
+        entre6Titre=MenuCanvas.create_text(larg_fenetre/2+160,haut_fenetre/4-45,fill="white",font="Times 15 bold",text="2J - PODER")
+        entre7Titre=MenuCanvas.create_text(larg_fenetre/4,400,fill="white",font="Times 15 bold",text="Option")
         
-        MenuCanvas.create_text(larg_fenetre-50,haut_fenetre-50,fill="white",font="Times 8 bold",text="Beta 1.8.5")
+        MenuCanvas.create_text(larg_fenetre-50,haut_fenetre-50,fill="white",font="Times 8 bold",text="Beta 1.9")
+        p1=MenuCanvas.create_text(200,haut_fenetre-10,fill="blue",font="Times 8 bold",text=pseudo1)
+        p2=MenuCanvas.create_text(300,haut_fenetre-10,fill="red",font="Times 8 bold",text=pseudo2)
+        p3=MenuCanvas.create_text(500,haut_fenetre-10,fill="green",font="Times 8 bold",text=pseudo3)
+        p4=MenuCanvas.create_text(600,haut_fenetre-10,fill="yellow",font="Times 8 bold",text=pseudo4)
         
         MusicMenu.play()
         
         
+            
+       
+            
+        def uploadJ1(new):
+            pseudo1=new
+            MenuCanvas.itemconfig(p1,text=pseudo1)
+        def uploadJ2(new):
+            pseudo2=new
+            MenuCanvas.itemconfig(p2,text=pseudo2)
+        def uploadJ3(new):
+            pseudo3=new
+            MenuCanvas.itemconfig(p3,text=pseudo3)
+        def uploadJ4(new):
+            pseudo4=new
+            MenuCanvas.itemconfig(p4,text=pseudo4)
+            
+            
+            
+         
+        def IA():       
+
+            #deplacement dans la zone
+               
+            global larg_fenetre
+            if MenuCanvas.coords(balleMenu)[2] > 250:
+                if MenuCanvas.coords(balleMenu)[3]-5 < MenuCanvas.coords(raquetteMenu2)[1]+25:
+                    if MenuCanvas.coords(raquetteMenu2)[1]>=155:
+                        MenuCanvas.move(raquetteMenu2,0,-5)
+                           
+                if MenuCanvas.coords(balleMenu)[3]-5 > MenuCanvas.coords(raquetteMenu2)[1]+25:
+                    if MenuCanvas.coords(raquetteMenu2)[1]+25<=320:
+                        MenuCanvas.move(raquetteMenu2,0,5)
+                        
+            if MenuCanvas.coords(balleMenu)[2] < 250:
+                if MenuCanvas.coords(balleMenu)[3]-5 < MenuCanvas.coords(raquetteMenu)[1]+25:
+                    if MenuCanvas.coords(raquetteMenu)[1]>=155:
+                        MenuCanvas.move(raquetteMenu,0,-5)
+                           
+                if MenuCanvas.coords(balleMenu)[3]-5 > MenuCanvas.coords(raquetteMenu)[1]+25:
+                    if MenuCanvas.coords(raquetteMenu)[1]+25<=320:
+                        MenuCanvas.move(raquetteMenu,0,5)
+                        
+                        
+                        
+                        
         def animation():
             global PosXballmenu, PosYballmenu,haut_fenetre,larg_fenetre,soundRebondRaquette,dxMenu,dyMenu,tabC
             
@@ -1543,28 +1705,38 @@ def creatMenu():
             MenuCanvas.coords(balleMenu,PosXballmenu,PosYballmenu,PosXballmenu+10,PosYballmenu+10)
             
            
-            if PosYballmenu <= 0 or PosYballmenu >= haut_fenetre-40:
+            if PosYballmenu <= 155 or PosYballmenu >= 340:
                 dyMenu=-dyMenu
                 soundRebondWallH.play()
                 MenuCanvas.itemconfig(balleMenu,fill=tabColor[rd.randint(0, 7)])
-            if PosXballmenu >= larg_fenetre-30:
+                
+            if PosXballmenu >= 345:
                 dxMenu=-dxMenu
                 soundRebondWallH.play()
                 MenuCanvas.itemconfig(balleMenu,fill=tabColor[rd.randint(0, 7)])
                 
-            if MenuCanvas.coords(balleMenu)[0] <= 20 and MenuCanvas.coords(raquetteMenu)[1] <= MenuCanvas.coords(balleMenu)[1] <= MenuCanvas.coords(raquetteMenu)[3]:#ici la balle ne rebondit pas sur la raquette
+            if MenuCanvas.coords(balleMenu)[0] <= 60 and MenuCanvas.coords(raquetteMenu)[1] <= MenuCanvas.coords(balleMenu)[1] <= MenuCanvas.coords(raquetteMenu)[3]:#ici la balle ne rebondit pas sur la raquette
                 dxMenu = -dxMenu
                 soundRebondRaquette.play()
                 MenuCanvas.itemconfig(balleMenu,fill='white')
-            if PosXballmenu<0 :
+                
+            if MenuCanvas.coords(balleMenu)[0] >= 335 and MenuCanvas.coords(raquetteMenu2)[1] <= MenuCanvas.coords(balleMenu)[1] <= MenuCanvas.coords(raquetteMenu2)[3]:#ici la balle ne rebondit pas sur la raquette
+                dxMenu = -dxMenu
+                soundRebondRaquette.play()
+                MenuCanvas.itemconfig(balleMenu,fill='white')
+                
+            if PosXballmenu<55 :
                 dxMenu=-dxMenu
                 MenuCanvas.itemconfig(balleMenu,fill=tabColor[rd.randint(0, 7)])
             
                 
             if not py.mixer.get_busy():
                 MusicMenu.play()
-            
+                
+                
+            MenuCanvas.after(20,IA)
             MenuCanvas.after(50,animation)
+            
             
         def onCanvasClick1(event):
             global scorej1,scorej2
@@ -1589,7 +1761,8 @@ def creatMenu():
              
         def onCanvasClick4(event):
             MusicMenu.stop()
-            menu.destroy()
+            menu.after(100,gameCredits)
+            menu.after(110, menu.destroy)
         
         def onCanvasClick5(event):
             global scorej1,scorej2,scorej3, scorej4
@@ -1606,6 +1779,13 @@ def creatMenu():
             menu.after(100,game_2playersPODER)
             menu.after(110, menu.destroy)
             
+        def onCanvasClick7(event):
+            MusicMenu.stop()
+            menu.after(100,optionMenu)
+            menu.after(110, menu.destroy)
+        
+    
+       
             
         #clique definition
         MenuCanvas.tag_bind(entre1, '<Button-1>', onCanvasClick1) 
@@ -1627,11 +1807,21 @@ def creatMenu():
         #clique definition
         MenuCanvas.tag_bind(entre6, '<Button-1>', onCanvasClick6) 
         MenuCanvas.tag_bind(entre6Titre, '<Button-1>', onCanvasClick6) 
+        
+        #clique definition
+        MenuCanvas.tag_bind(entre7Titre, '<Button-1>', onCanvasClick7) 
+        
+        
+        
+        
+        
+       
         animation()
         
+      
     menu.focus_force()
     animIntro()
+   
     menu.mainloop()
-
     
 creatMenu()
