@@ -16,5 +16,5 @@
 "c" = gauche
 "v" = droite
 
-##Interaction avec le menu :
+## Interaction avec le menu :
 utilisez la souris
