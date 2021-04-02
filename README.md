@@ -1,4 +1,4 @@
-# PongGame Version 9 TKINTER
+# PongGame [Version 9 TKINTER]
 
 ## Commandes :
 ### Joueur 1 :
@@ -18,3 +18,16 @@
 
 ## Interaction avec le menu :
 utilisez la souris
+
+# PongGame [Release Version Pygame]
+### Joueur 1 :
+"a" = haut
+"q" = bas
+### Joueur 2 : 
+"UP" = haut
+"down" = bas
+
+## Interaction avec le menu :
+"UP" = haut
+"DOWN" = bas
+"RETURN" = select
